@@ -1,69 +1,67 @@
 import React from "react";
 import {
-  Autocomplete,
-  AutocompleteItem,
-  Input,
-  Button,
-  Modal,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalBody,
-} from "@nextui-org/react";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { animals } from "../data/data";
 
-const Activity = ({ key, isOpen, index, onOpenChange }) => {
+const Activity = ({ isOpen, index, onOpenChange }) => {
   return (
-    <>
-      <Modal
-        key={key}
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-        placement="center"
-      >
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">
-                Activity {index + 1}
-              </ModalHeader>
-              <ModalBody>
-                <div className="flex flex-col gap-4 items-start w-full">
-                  {/* Full-width inputs */}
-                  <Input label="Name" className="w-full" />
-                  <Input label="Description" className="w-full" />
-
-                  {/* Full-width autocomplete */}
-                  <Autocomplete
-                    defaultItems={animals}
-                    label="Location"
-                    placeholder="Search a place"
-                    className="w-full"
-                  >
-                    {(animal) => (
-                      <AutocompleteItem key={animal.value}>
-                        {animal.label}
-                      </AutocompleteItem>
-                    )}
-                  </Autocomplete>
-
-                  {/* Full-width file input */}
-                  <Input type="file" label="Images" className="w-full" />
-                </div>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="flat" onPress={onClose}>
-                  Close
-                </Button>
-                <Button color="primary" onPress={onClose}>
-                  Save
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
-    </>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Activity {index + 1}</DialogTitle>
+        </DialogHeader>
+        <div className="flex flex-col gap-4 items-start w-full">
+          <div className="grid w-full items-center gap-1.5">
+            <Label htmlFor="name">Name</Label>
+            <Input id="name" className="w-full" />
+          </div>
+          <div className="grid w-full items-center gap-1.5">
+            <Label htmlFor="description">Description</Label>
+            <Input id="description" className="w-full" />
+          </div>
+          <div className="grid w-full items-center gap-1.5">
+            <Label htmlFor="location">Location</Label>
+            <Select>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Search a place" />
+              </SelectTrigger>
+              <SelectContent>
+                {animals.map((animal) => (
+                  <SelectItem key={animal.value} value={animal.value}>
+                    {animal.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="grid w-full items-center gap-1.5">
+            <Label htmlFor="images">Images</Label>
+            <Input id="images" type="file" className="w-full" />
+          </div>
+        </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={onOpenChange}>
+            Close
+          </Button>
+          <Button onClick={onOpenChange}>Save</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 

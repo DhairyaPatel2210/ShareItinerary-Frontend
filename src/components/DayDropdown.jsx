@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { DatePicker, Button, useDisclosure, Chip } from "@nextui-org/react";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Badge } from "@/components/ui/badge";
 import Activity from "./Activity";
 
 const DayDropdown = () => {
   const [activities, setActivities] = useState([{ id: 0, isOpen: false }]);
-  const { onOpenChange } = useDisclosure(); // Use this to manage global modal state
+  const [date, setDate] = useState(new Date());
 
   const handleAddActivity = () => {
     setActivities([...activities, { id: activities.length, isOpen: false }]);
@@ -31,7 +33,7 @@ const DayDropdown = () => {
       .filter((activity) => activity.id !== id)
       .map((activity, index) => ({
         ...activity,
-        id: index, // Reassign IDs based on the new order
+        id: index,
       }));
     setActivities(updatedActivities);
   };
@@ -40,25 +42,34 @@ const DayDropdown = () => {
     <>
       <div className="flex flex-col gap-4 items-start">
         <div className="flex items-center gap-2 w-full">
-          {/* DatePicker with button on the right */}
-          <DatePicker label="Date" className="flex-1" />
-          <Button onPress={handleAddActivity} color="primary">
-            Add Activity
-          </Button>
+          <Calendar
+            mode="single"
+            selected={date}
+            onSelect={setDate}
+            className="rounded-md border"
+          />
+          <Button onClick={handleAddActivity}>Add Activity</Button>
         </div>
 
-        {/* Chips to represent activities, arranged in rows */}
         <div className="flex flex-wrap gap-2">
           {activities.map((activity) => (
             <div key={activity.id} className="relative flex-shrink-0">
-              <Chip
-                color="primary"
-                onClose={() => handleRemoveActivity(activity.id)}
+              <Badge
+                variant="secondary"
+                className="cursor-pointer"
                 onClick={() => handleOpenModal(activity.id)}
-                className="flex items-center gap-2"
               >
                 Activity {activity.id + 1}
-              </Chip>
+                <button
+                  className="ml-2 text-xs"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRemoveActivity(activity.id);
+                  }}
+                >
+                  ×
+                </button>
+              </Badge>
               <Activity
                 index={activity.id}
                 isOpen={activity.isOpen}

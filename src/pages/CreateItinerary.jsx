@@ -1,11 +1,13 @@
 import React, { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
-  Card,
-  Input,
-  Button,
   Accordion,
+  AccordionContent,
   AccordionItem,
-} from "@nextui-org/react";
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import DayDropdown from "../components/DayDropdown";
 
 export default function CreateItinerary() {
@@ -26,45 +28,42 @@ export default function CreateItinerary() {
     <div className="flex h-full w-full">
       <div className="flex-1 p-4">
         <Card className="h-full overflow-auto" id="input">
-          <div className="flex flex-col gap-4 p-4">
+          <CardContent className="flex flex-col gap-4 p-4">
             <Input
-              label="Name"
+              placeholder="Name"
               value={startPoint}
               onChange={(e) => setStartPoint(e.target.value)}
             />
             <Input
-              label="Summary"
+              placeholder="Summary"
               value={destination}
               onChange={(e) => setDestination(e.target.value)}
             />
             <Input
               type="number"
-              label="No. of days"
+              placeholder="No. of days"
               value={numDays}
               onChange={handleDaysChange}
             />
-            <Accordion>
+            <Accordion type="single" collapsible className="w-full">
               {Array.from({ length: numDays }, (_, index) => (
-                <AccordionItem
-                  key={index + 1}
-                  aria-label={`Day ${index + 1}`}
-                  title={`Day ${index + 1}`}
-                >
-                  <DayDropdown />
+                <AccordionItem key={index + 1} value={`day-${index + 1}`}>
+                  <AccordionTrigger>{`Day ${index + 1}`}</AccordionTrigger>
+                  <AccordionContent>
+                    <DayDropdown />
+                  </AccordionContent>
                 </AccordionItem>
               ))}
             </Accordion>
-            <Button color="primary" onClick={handleCreateItinerary}>
-              Create Itinerary
-            </Button>
-          </div>
+            <Button onClick={handleCreateItinerary}>Create Itinerary</Button>
+          </CardContent>
         </Card>
       </div>
       <div className="flex-1 p-4">
         <Card className="h-full" id="map">
-          <div className="h-full flex items-center justify-center text-2xl font-bold text-gray-400">
+          <CardContent className="h-full flex items-center justify-center text-2xl font-bold text-gray-400">
             Map
-          </div>
+          </CardContent>
         </Card>
       </div>
     </div>

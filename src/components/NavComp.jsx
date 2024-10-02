@@ -1,101 +1,74 @@
 import React from "react";
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link,Button, Switch} from "@nextui-org/react";
-import { MoonIcon } from "../assets/MoonIcon";
-import { SunIcon } from "../assets/SunIcon";
-
+import { Link } from "@nextui-org/link";
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { MoonIcon, SunIcon, MenuIcon } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 export default function NavComp({ toggleDarkMode }) {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-
-  const menuItems = [
-    "Home",
-    "Login",
-    "Sign Up",
-    "CreateItinerary",
-    "Explore"
-  ];
+  const menuItems = ["Home", "Login", "Sign Up", "CreateItinerary", "Explore"];
 
   const items = {
-    "Home": "/",
-    "Login" : "/login",
-    "Sign Up" : "/signup",
-    "CreateItinerary" : "/create-itinerary",
-    "Explore" : "/explore"
+    Home: "/",
+    Login: "/login",
+    "Sign Up": "/signup",
+    CreateItinerary: "/create-itinerary",
+    Explore: "/explore",
   };
 
   return (
-    <Navbar
-      isBordered
-      isMenuOpen={isMenuOpen}
-      onMenuOpenChange={setIsMenuOpen}
-    >
-      <NavbarContent className="sm:hidden" justify="start">
-        <NavbarMenuToggle aria-label={isMenuOpen ? "Close menu" : "Open menu"} />
-      </NavbarContent>
+    <nav className="flex items-center justify-between p-4 border-b">
+      <div className="flex items-center">
+        <Link href="/" className="flex items-center">
+          <img src="/logo.png" alt="Logo" className="w-9 h-9 mr-2" />
+          <span className="font-bold text-lg">ShareItinerary</span>
+        </Link>
+      </div>
 
-      <NavbarContent className="sm:hidden pr-3" justify="center">
-        <NavbarBrand>
-          <Link href="/">
-            <img src="/logo.png" style={{ width: '36px', height: '36px', margin:'10px'}}/>
-            <p className="font-bold text-inherit">ShareItinerary</p>
-          </Link>
-        </NavbarBrand>
-      </NavbarContent>
+      <div className="hidden sm:flex items-center space-x-4">
+        <Link href="/" className="text-sm font-medium">
+          Home
+        </Link>
+        <Link href="/create-itinerary" className="text-sm font-medium">
+          CreateItinerary
+        </Link>
+        <Link href="#" className="text-sm font-medium">
+          Explore
+        </Link>
+      </div>
 
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarBrand>
-          <Link href="/" color="foreground">
-            <img src="/logo.png" style={{ width: '36px', height: '36px', margin:'10px'}}/>
-            <p className="font-bold text-inherit">ShareItinerary</p>
-          </Link>
-        </NavbarBrand>
-        <NavbarItem>
-          <Link color="foreground" href="/">
-            Home
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link href="/create-itinerary" color="foreground">
-            CreateItinerary
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" href="#">
-            Explore
-          </Link>
-        </NavbarItem>
-      </NavbarContent>
-
-      <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex">
-          <Link href="/login">Login</Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Button className="hidden lg:flex" as={Link} color="warning" href="/signup" variant="flat">
-            Sign Up
-          </Button>
-        </NavbarItem>
-        <NavbarItem>
-          <Switch
-            defaultSelected
-            color="success"
-            size="md"
-            startContent={<SunIcon/>}
-            endContent={<MoonIcon />}
-            onChange={toggleDarkMode}
-          />
-        </NavbarItem>
-      </NavbarContent>
-
-      <NavbarMenu>
-        {Object.entries(items).map(([item, link], index) => (
-          <NavbarMenuItem key={`${item}-${index}`}>
-            <Link className="w-full" href={link} size="lg">
-              {item}
-            </Link>
-          </NavbarMenuItem>
-        ))}
-      </NavbarMenu>
-    </Navbar>
+      <div className="flex items-center space-x-4">
+        <Link
+          href="/login"
+          className="hidden lg:inline-block text-sm font-medium"
+        >
+          Login
+        </Link>
+        <Button asChild variant="outline" className="hidden lg:inline-flex">
+          <Link href="/signup">Sign Up</Link>
+        </Button>
+        <Switch
+          checked={true}
+          onCheckedChange={toggleDarkMode}
+          className="hidden sm:inline-flex"
+        />
+        {/* <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="ghost" size="icon" className="sm:hidden">
+              <MenuIcon className="h-5 w-5" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent>
+            <nav className="flex flex-col space-y-4">
+              {Object.entries(items).map(([item, link]) => (
+                <Link key={item} href={link} className="text-sm font-medium">
+                  {item}
+                </Link>
+              ))}
+            </nav>
+          </SheetContent>
+        </Sheet> */}
+      </div>
+    </nav>
   );
 }
