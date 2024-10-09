@@ -30,6 +30,8 @@ export const updateDayReducer = (state, action) => {
     ...currentDayData,
     ...newDayData,
   };
+
+  state = state;
 };
 
 export const deleteDayReducer = (state, action) => {

@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import Activity from "./Activity";
 import { DatePicker } from "./ui/datepicker";
 
@@ -31,6 +31,30 @@ const DayDropdown = ({ itineraryId, dayId }) => {
   //declaring dispatcher
   const dispatch = useDispatch();
 
+  const updateStore = useCallback(() => {
+    const newDayData = { date, activities };
+    console.log(newDayData);
+    dispatch(
+      updateDay({
+        itineraryId: itineraryId,
+        dayId: dayId,
+        newDayData: newDayData,
+      })
+    );
+  }, [date, activities, dispatch]);
+
+  const funcRef = useRef(updateStore);
+
+  useEffect(() => {
+    funcRef.current = updateStore;
+  }, [updateStore]);
+
+  useEffect(() => {
+    return () => {
+      funcRef.current();
+    };
+  }, []);
+
   const handleAddActivity = () => {
     // dispatch(addActivity({ itineraryId: itineraryId, dayId: dayId }));
     const newActivity = {
@@ -46,7 +70,7 @@ const DayDropdown = ({ itineraryId, dayId }) => {
 
   const handleSaveActivity = (id, activityData) => {
     const newActivites = activities.map((a) =>
-      a.id === id ? { ...a, activityData } : a
+      a.id === id ? { ...a, ...activityData } : a
     );
     setActivities(newActivites);
   };
@@ -61,14 +85,14 @@ const DayDropdown = ({ itineraryId, dayId }) => {
   };
 
   const handleCloseModal = (id) => {
-    const newDayData = { date: date, activities: activities };
-    dispatch(
-      updateDay({
-        itineraryId: itineraryId,
-        dayId: dayId,
-        newDayData: newDayData,
-      })
-    );
+    // const newDayData = { date: date, activities: activities };
+    // dispatch(
+    //   updateDay({
+    //     itineraryId: itineraryId,
+    //     dayId: dayId,
+    //     newDayData: newDayData,
+    //   })
+    // );
     setActivities((prevActivities) => {
       const newActivities = prevActivities.map((activity) =>
         activity.id === id ? { ...activity, isOpen: false } : activity
