@@ -11,14 +11,18 @@ export default function Login() {
 
   return (
     <div className="flex h-full w-full items-center justify-center p-4 sm:p-8">
-      <Card className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mx-auto p-4 sm:p-6 md:p-8 shadow-lg min-h-[60vh] sm:min-h-[50vh]">
-        <CardContent className="flex flex-col items-center justify-center space-y-8 sm:space-y-10 md:space-y-8">
-          <Input type="email" placeholder="Email" className="w-full" />
+      <Card className="w-full rounded-lg flex items-center justify-center max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mx-auto p-4 sm:p-6 md:p-8 shadow-lg min-h-[60vh] sm:min-h-[50vh]">
+        <CardContent className="w-full flex flex-col items-center justify-center space-y-8 sm:space-y-10 md:space-y-8">
+          <Input
+            type="email"
+            placeholder="Email"
+            className="w-full h-14 sm:h-11"
+          />
           <div className="relative w-full">
             <Input
               type={isVisible ? "text" : "password"}
               placeholder="Password"
-              className="w-full pr-10"
+              className="w-full pr-10 h-14 sm:h-11"
             />
             <button
               className="absolute inset-y-0 right-0 flex items-center pr-3"
@@ -32,7 +36,7 @@ export default function Login() {
               )}
             </button>
           </div>
-          <Button className="w-full h-10 sm:h-12 text-md font-semibold">
+          <Button className="w-full h-14 sm:h-11 text-md font-semibold">
             Login
           </Button>
         </CardContent>

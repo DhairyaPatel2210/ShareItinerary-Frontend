@@ -1,4 +1,4 @@
-export const animals = [
+export const locations = [
   {
     label: "Cat",
     value: "cat",

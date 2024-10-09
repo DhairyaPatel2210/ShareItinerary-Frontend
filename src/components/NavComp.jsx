@@ -1,73 +1,76 @@
-import React from "react";
-import { Link } from "@nextui-org/link";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { MoonIcon, SunIcon, MenuIcon } from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { ThemeSwitch } from "./ThemeSwitch";
+import ProfileDropdown from "./ProfileDropdown";
+import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
+import { Menu } from "lucide-react";
 
-export default function NavComp({ toggleDarkMode }) {
-  const menuItems = ["Home", "Login", "Sign Up", "CreateItinerary", "Explore"];
+export default function NavComp() {
+  const menuItems = ["Home", "CreateItinerary", "Explore"];
 
   const items = {
     Home: "/",
     Login: "/login",
     "Sign Up": "/signup",
     CreateItinerary: "/create-itinerary",
-    Explore: "/explore",
+    Explore: "/",
   };
 
   return (
-    <nav className="flex items-center justify-between p-4 border-b">
+    <nav className="flex items-center justify-between p-4">
       <div className="flex items-center">
-        <Link href="/" className="flex items-center">
+        <Link to="/" className="flex items-center">
           <img src="/logo.png" alt="Logo" className="w-9 h-9 mr-2" />
           <span className="font-bold text-lg">ShareItinerary</span>
         </Link>
       </div>
 
+      {/* Desktop Menu */}
       <div className="hidden sm:flex items-center space-x-4">
-        <Link href="/" className="text-sm font-medium">
-          Home
-        </Link>
-        <Link href="/create-itinerary" className="text-sm font-medium">
-          CreateItinerary
-        </Link>
-        <Link href="#" className="text-sm font-medium">
-          Explore
-        </Link>
+        {menuItems.map((item) => (
+          <Link
+            key={item}
+            to={items[item]}
+            className="text-sm font-medium hover:underline"
+          >
+            {item}
+          </Link>
+        ))}
       </div>
 
       <div className="flex items-center space-x-4">
-        <Link
-          href="/login"
-          className="hidden lg:inline-block text-sm font-medium"
-        >
-          Login
-        </Link>
-        <Button asChild variant="outline" className="hidden lg:inline-flex">
-          <Link href="/signup">Sign Up</Link>
-        </Button>
-        <Switch
-          checked={true}
-          onCheckedChange={toggleDarkMode}
-          className="hidden sm:inline-flex"
-        />
-        {/* <Sheet>
+        <ThemeSwitch />
+        <ProfileDropdown />
+
+        {/* Mobile Menu Trigger */}
+        <Sheet>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="sm:hidden">
-              <MenuIcon className="h-5 w-5" />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="sm:hidden" // Show only on small screens
+            >
+              <Menu className="h-6 w-6" />
+              <span className="sr-only">Open menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent>
-            <nav className="flex flex-col space-y-4">
-              {Object.entries(items).map(([item, link]) => (
-                <Link key={item} href={link} className="text-sm font-medium">
+
+          {/* Mobile Menu Content */}
+          <SheetContent side="right" className="w-full max-w-xs">
+            <div className="flex flex-col gap-4 p-4">
+              {menuItems.map((item) => (
+                <Link
+                  key={item}
+                  to={items[item]}
+                  className="font-medium hover:underline"
+                >
                   {item}
                 </Link>
               ))}
-            </nav>
+            </div>
           </SheetContent>
-        </Sheet> */}
+        </Sheet>
       </div>
     </nav>
   );
