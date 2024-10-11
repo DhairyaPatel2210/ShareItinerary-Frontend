@@ -4,11 +4,11 @@ export const addDayReducer = (state, action) => {
   const index = state.itineraries.findIndex((i) => i.id === action.payload);
   state.itineraries[index].days.push({
     id: nanoid(),
-    date: null,
+    date: "",
     activities: [
       {
         id: nanoid(),
-        title: "",
+        name: "",
         description: "",
         location: "",
         image: "",
@@ -34,6 +34,7 @@ export const updateDayReducer = (state, action) => {
 
 export const deleteDayReducer = (state, action) => {
   const { itineraryId, dayId } = action.payload;
+  console.log(dayId);
   const itineraryIndex = state.itineraries.findIndex(
     (i) => i.id === itineraryId
   );

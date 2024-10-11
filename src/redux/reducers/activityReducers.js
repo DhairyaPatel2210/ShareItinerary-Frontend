@@ -7,7 +7,7 @@ export const addActivityReducer = (state, action) => {
     .days.find((d) => d.id === dayId)
     .activities.push({
       id: nanoid(),
-      title: "",
+      name: "",
       description: "",
       location: "",
       image: "",

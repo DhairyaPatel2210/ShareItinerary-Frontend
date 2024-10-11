@@ -8,23 +8,16 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AutoComplete } from "./ui/autocomplete";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
+import { DialogDescription } from "@radix-ui/react-dialog";
 
 const Activity = ({ isOpen, index, onOpenChange, initialData, onSave }) => {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [location, setLocation] = useState("");
-  const [image, setImage] = useState(null);
-
-  useEffect(() => {
-    if (initialData) {
-      setName(initialData.name || name);
-      setDescription(initialData.description || description);
-      setLocation(initialData.location || location);
-      setImage(initialData.image || image);
-    }
-  }, [initialData]);
+  const [name, setName] = useState(initialData.name || "");
+  const [description, setDescription] = useState(initialData.description || "");
+  const [location, setLocation] = useState(initialData.location || "");
+  const [image, setImage] = useState(initialData.image || null);
 
   const handleSave = () => {
     const activityData = {
@@ -34,15 +27,32 @@ const Activity = ({ isOpen, index, onOpenChange, initialData, onSave }) => {
       image: image,
     };
     onSave(activityData);
+  };
+
+  const handleOpenChange = () => {
+    // when the dialog is closed without saving, it should reset the internal state
+    setName("");
+    setDescription("");
+    setLocation("");
+    setImage(null);
     onOpenChange();
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTitle />
-      <DialogContent>
+      <DialogContent
+        onOpenAutoFocus={(e) => {
+          e.preventDefault();
+        }}
+      >
         <DialogHeader>
           <DialogTitle>Activity {index + 1}</DialogTitle>
+          <VisuallyHidden.Root>
+            <DialogDescription>
+              Mandatory field, but will be hidden
+            </DialogDescription>
+          </VisuallyHidden.Root>
         </DialogHeader>
         <div className="flex flex-col gap-4 items-start w-full">
           <div className="grid w-full items-center gap-1.5">
@@ -65,7 +75,11 @@ const Activity = ({ isOpen, index, onOpenChange, initialData, onSave }) => {
           </div>
           <div className="grid w-full items-center gap-1.5">
             <Label htmlFor="location">Location</Label>
-            <AutoComplete value={location} setLocation={setLocation} />
+            <AutoComplete
+              id={"location"}
+              value={location}
+              setLocation={setLocation}
+            />
           </div>
           <div className="grid w-full items-center gap-1.5">
             <Label htmlFor="images">Images</Label>
@@ -75,11 +89,11 @@ const Activity = ({ isOpen, index, onOpenChange, initialData, onSave }) => {
               className="w-full"
               onChange={(event) => setImage(event.target.files[0].name)}
             />
-            <Label htmlFor="images">{image && `Uploaded: ${image}`}</Label>
+            <Label>{image && `Uploaded: ${image}`}</Label>
           </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={onOpenChange}>
+          <Button variant="outline" onClick={handleOpenChange}>
             Close
           </Button>
           <Button onClick={handleSave}>Save</Button>

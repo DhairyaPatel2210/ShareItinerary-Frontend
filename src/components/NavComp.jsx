@@ -27,7 +27,7 @@ export default function NavComp() {
       </div>
 
       {/* Desktop Menu */}
-      <div className="hidden sm:flex items-center space-x-4">
+      <div className="hidden lg:flex items-center space-x-4">
         {menuItems.map((item) => (
           <Link
             key={item}
@@ -49,7 +49,7 @@ export default function NavComp() {
             <Button
               variant="ghost"
               size="icon"
-              className="sm:hidden" // Show only on small screens
+              className="lg:hidden" // Show only on small screens
             >
               <Menu className="h-6 w-6" />
               <span className="sr-only">Open menu</span>

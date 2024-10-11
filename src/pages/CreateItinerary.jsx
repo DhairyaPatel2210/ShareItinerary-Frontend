@@ -7,7 +7,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useEffect, useState } from "react";
 import DayDropdown from "../components/DayDropdown";
 
 import {
@@ -16,6 +15,7 @@ import {
   updateItinerarySummary,
 } from "@/redux/itinerarySlice";
 import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 
 export default function CreateItinerary() {
   const itineraries = useSelector((state) => state.itineraries);
@@ -23,26 +23,19 @@ export default function CreateItinerary() {
 
   const dispatch = useDispatch();
 
+  // state for accordian - this is to handle delete functionality
+  const [currentAccordion, setCurrentAccordion] = useState("");
+
   const handleAddDay = () => {
     dispatch(addDay(itineraries[0].id));
   };
 
-  const [openAccordion, setOpenAccordion] = useState("");
-
-  const handleAccordionChange = (newValue) => {
-    if (
-      newValue === "" ||
-      (openAccordion !== "" && openAccordion !== newValue)
-    ) {
-      console.log("Accordion closed");
-    }
-    // Update the current open accordion
-    setOpenAccordion(newValue);
+  const handleCreateItinerary = () => {
+    console.log("Current Itinerary value", itineraries[0]);
   };
 
-  const handleCreateItinerary = () => {
-    console.log("Creating itinerary for:", name, summary);
-    // Add your itinerary creation logic here
+  const handleDeleteDay = () => {
+    setCurrentAccordion("");
   };
 
   return (
@@ -82,16 +75,17 @@ export default function CreateItinerary() {
               type="single"
               collapsible
               className="w-full"
-              onValueChange={handleAccordionChange}
+              value={currentAccordion}
+              onValueChange={setCurrentAccordion}
             >
               {Array.from({ length: days.length }, (_, index) => (
                 <AccordionItem key={index + 1} value={`day-${index + 1}`}>
                   <AccordionTrigger>{`Day ${index + 1}`} </AccordionTrigger>
                   <AccordionContent>
-                    {/* Pass handleDeleteDay function as a prop to DayDropdown */}
                     <DayDropdown
                       itineraryId={itineraries[0].id}
                       dayId={days[index].id}
+                      deleteDayHandler={handleDeleteDay}
                     />
                   </AccordionContent>
                 </AccordionItem>
@@ -101,7 +95,7 @@ export default function CreateItinerary() {
           </CardContent>
         </Card>
       </div>
-      <div className="hidden sm:flex sm:flex-1 p-4">
+      <div className="hidden lg:flex lg:flex-1 p-4">
         <Card className="h-full w-full" id="map">
           <CardContent className="h-full flex items-center justify-center text-2xl font-bold text-gray-400">
             Map

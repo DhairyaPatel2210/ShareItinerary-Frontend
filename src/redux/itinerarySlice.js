@@ -1,21 +1,21 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
 import {
+  addActivityReducer,
+  deleteActivityReducer,
+} from "./reducers/activityReducers";
+import {
   addDayReducer,
-  updateDayReducer,
   deleteDayReducer,
+  updateDayReducer,
 } from "./reducers/dayReducers";
 import {
   updateItineraryNameReducer,
   updateItinerarySummaryReducer,
 } from "./reducers/itineraryReducers";
-import {
-  addActivityReducer,
-  deleteActivityReducer,
-} from "./reducers/activityReducers";
 
 const activityObject = {
   id: nanoid(),
-  title: "",
+  name: "",
   description: "",
   location: "",
   image: "",
@@ -23,7 +23,7 @@ const activityObject = {
 
 export const dayObject = {
   id: nanoid(),
-  date: null,
+  date: "",
   activities: [activityObject],
 };
 
